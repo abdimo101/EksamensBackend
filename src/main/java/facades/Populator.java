@@ -16,6 +16,7 @@ import utils.EMF_Creator;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -30,11 +31,15 @@ public class Populator {
         em.getTransaction().begin();
         List<Driver> driverList = new ArrayList<>();
         List<Car> carList = new ArrayList<>();
-        Car car = new Car("nametest1", "brandtest1", "maketest1", 2010, driverList);
-        Driver driver = new Driver("drivertest1", 2001, "male", car);
+        Car car = new Car("nametest3", "brandtest3", "maketest3", 2015, driverList);
+        Car car1 = new Car("nametest4", "brandtest4", "maketest4", 2005, driverList);
+        Driver driver = new Driver("drivertest5", 1975, "male", car);
+        Driver driver1 = new Driver("drivertest6", 1981, "female", car);
         driverList.add(driver);
+        driverList.add(driver1);
         carList.add(car);
-        Race race = new Race("nametest", "locationtest", carList);
+        carList.add(car1);
+        Race race = new Race("nametest2","13-01-22", "14:24","locationtest2", carList);
         em.persist(race);
         em.getTransaction().commit();
         em.close();

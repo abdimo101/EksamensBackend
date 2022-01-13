@@ -1,39 +1,43 @@
-package entities;
+package dtos;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.sql.Time;
-import java.time.LocalDateTime;
+import entities.Car;
+import entities.Race;
+
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-@Table(name = "race")
-@Entity
-public class Race implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+public class RaceDTO {
     private Integer id;
     private String name;
-    private String location;
     private String date;
     private String time;
-
-
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    private String location;
     private List<Car> carList;
 
-    public Race() {
-    }
-
-    public Race(String name, String date, String time, String location, List<Car> carList) {
+    public RaceDTO(String name, String date, String time, String location, List<Car> carList) {
         this.name = name;
         this.date = date;
         this.time = time;
         this.location = location;
         this.carList = carList;
+    }
+
+    public RaceDTO(Race race) {
+        this.id = race.getId();
+        this.name = race.getName();
+        this.date = race.getDate();
+        this.time = race.getTime();
+        this.location = race.getLocation();
+        this.carList = race.getCarList();
+    }
+
+    public static List<RaceDTO> getDTOs(List<Race> races){
+        List<RaceDTO> rDTO = new ArrayList<>();
+        races.forEach(res->rDTO.add(new RaceDTO(res)));
+        return rDTO;
     }
 
     public Integer getId() {
