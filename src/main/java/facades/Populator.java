@@ -14,7 +14,9 @@ import javax.persistence.EntityManagerFactory;
 
 import utils.EMF_Creator;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,21 +25,19 @@ import java.util.List;
  */
 public class Populator {
     public static void populate(){
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-       // BoatFacade FACADE =  BoatFacade.getBoatFacade(emf);
-
-      //  System.out.println(FACADE.getHarbourByName("Thors havn"));
-        /*Owner owner = new Owner("Jens", "Vejvej 10", 12345678);
-        Owner owner1 = new Owner("Mikkel Hansen", "Gayvej 25", 11223344);
-        Harbour harbour = new Harbour("Havnhavn", "Havnhavnevejgade 25", 69);
-        Boat boat = new Boat("Ferrari", "Ferrari boat", "FerrariBoat", "https://www.boat24.com/fotos/xlarge/341796-abcbdb664172330ce1008fab221c58ad-x-1463319-5f43b6c9052ae4b5c128d4b2dedb7c31.jpg", harbour);
-        owner1.addBoat(boat);
-        em.persist(boat);
+        List<Driver> driverList = new ArrayList<>();
+        List<Car> carList = new ArrayList<>();
+        Car car = new Car("nametest1", "brandtest1", "maketest1", 2010, driverList);
+        Driver driver = new Driver("drivertest1", 2001, "male", car);
+        driverList.add(driver);
+        carList.add(car);
+        Race race = new Race("nametest", "locationtest", carList);
+        em.persist(race);
         em.getTransaction().commit();
-        em.close();*/
+        em.close();
     }
 
     public static void main(String[] args) {
