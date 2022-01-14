@@ -3,32 +3,28 @@ package facades;
 import dtos.CarDTO;
 import dtos.DriverDTO;
 import dtos.RaceDTO;
-import dtos.RenameMeDTO;
 import entities.Car;
 import entities.Driver;
 import entities.Race;
-import entities.RenameMe;
-import utils.EMF_Creator;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
+import javax.ws.rs.WebApplicationException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RaceFacade {
+public class SharedFacade {
 
-    private static RaceFacade instance;
+    private static SharedFacade instance;
     private static EntityManagerFactory emf;
 
     //Private Constructor to ensure Singleton
-    private RaceFacade() {}
+    private SharedFacade() {}
     
 
-    public static RaceFacade getRaceFacade(EntityManagerFactory _emf) {
+    public static SharedFacade getSharedFacade(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
-            instance = new RaceFacade();
+            instance = new SharedFacade();
         }
         return instance;
     }
@@ -91,6 +87,24 @@ public class RaceFacade {
         } finally {
             em.close();
         }
+    }
+
+    public String deleteCar(int id) {
+        EntityManager em = getEntityManager();
+        Car car = em.find(Car.class, id);
+        try {
+            if (car == null) {
+                throw new EntityNotFoundException("Could not find any car with id: " + id);
+            }
+            em.getTransaction().begin();
+            em.remove(car);
+            em.getTransaction().commit();
+        } catch (EntityNotFoundException enfe) {
+            throw new WebApplicationException(enfe.getMessage(), 404);
+        } finally {
+            em.close();
+        }
+        return "Car with id: " + id + " was successfully deleted";
     }
 
 
