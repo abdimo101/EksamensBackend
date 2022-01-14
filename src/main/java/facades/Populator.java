@@ -5,42 +5,44 @@
  */
 package facades;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import entities.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-
 import utils.EMF_Creator;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
-/**
- *
- * @author tha
- */
+
 public class Populator {
     public static void populate(){
         EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
+        //FacadeExample fe = FacadeExample.getFacadeExample(emf);
+        /*
+        fe.create(new RenameMeDTO(new RenameMe("First 1", "Last 1")));
+        fe.create(new RenameMeDTO(new RenameMe("First 2", "Last 2")));
+        fe.create(new RenameMeDTO(new RenameMe("First 3", "Last 3")));
+         */
+
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        List<Driver> driverList = new ArrayList<>();
         List<Car> carList = new ArrayList<>();
-        Car car = new Car("nametest3", "brandtest3", "maketest3", 2015, driverList);
-        Car car1 = new Car("nametest4", "brandtest4", "maketest4", 2005, driverList);
-        Driver driver = new Driver("drivertest5", 1975, "male", car);
-        Driver driver1 = new Driver("drivertest6", 1981, "female", car);
+        List<Driver> driverList = new ArrayList<>();
+        Car car = new Car("Audiname", "Audi", "A4", 2015, driverList);
+        Car car1 = new Car("Fordname", "Ford", "Fiesta", 2005, driverList);
+        Driver driver = new Driver("Abdi", 1999, "male", car);
+        Driver driver1 = new Driver("Zamad", 1980, "male", car1);
         driverList.add(driver);
         driverList.add(driver1);
         carList.add(car);
         carList.add(car1);
-        Race race = new Race("nametest2","13-01-22", "14:24","locationtest2", carList);
+
+        Race race = new Race("Formel 1","London", carList);
+        Race race1 = new Race("Drifting","København");
         em.persist(race);
+        em.persist(race1);
+
         em.getTransaction().commit();
         em.close();
     }

@@ -3,15 +3,14 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dtos.CarDTO;
 import dtos.RaceDTO;
 import facades.RaceFacade;
 import utils.EMF_Creator;
 
 import javax.persistence.EntityManagerFactory;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.persistence.EntityNotFoundException;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
@@ -19,7 +18,7 @@ import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 //Todo Remove or change relevant parts before ACTUAL use
-@Path("user")
+@Path("race")
 public class UserResource {
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
@@ -34,29 +33,36 @@ public class UserResource {
     @Context
     SecurityContext securityContext;
 
-    @Path("race/all")
+    @Path("all")
     @GET
     //@RolesAllowed("user")
     @Produces({MediaType.APPLICATION_JSON})
     public String getAllRaces() {
-        return GSON.toJson(FACADE.getAllRaces());
+        return GSON.toJson(FACADE.getAll());
     }
 
-    @Path("race/{raceName}")
-    @GET
-    //@RolesAllowed({"user", "admin"})
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getAllBoatOwner(@PathParam("raceName") String raceName) {
-        RaceDTO rdto = FACADE.getRaceByName(raceName);
-        return GSON.toJson(rdto);
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    public String createRace(String race){
+        RaceDTO rdto = GSON.fromJson(race, RaceDTO.class);
+        RaceDTO newrdto = FACADE.createRace(rdto);
+        return GSON.toJson(newrdto);
     }
 
-    @Path("race/{racename}")
+    @Path("{racename}")
     @GET
     //@RolesAllowed({"user", "admin"})
     @Produces({MediaType.APPLICATION_JSON})
     public String getCarsByRace(@PathParam("racename") String raceName) {
-        List<RaceDTO> rdtoList = FACADE.showCarsByRace(raceName);
-        return GSON.toJson(rdtoList);
+        List<CarDTO> cdtoList = FACADE.getCarsByRace(raceName);
+        return GSON.toJson(cdtoList);
+    }
+
+    @Path("drivers/{raceName}")
+    @GET
+    @Produces("application/json")
+    public String getDriversByName(@PathParam("raceName")String name) {
+        return GSON.toJson(FACADE.getCarsByRace(name));
     }
 }

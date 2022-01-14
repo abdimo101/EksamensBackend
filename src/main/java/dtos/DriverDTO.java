@@ -1,38 +1,46 @@
-package entities;
+package dtos;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import entities.Car;
 
-@Table(name = "driver")
-@Entity
-public class Driver {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Integer id;
+import entities.Driver;
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class DriverDTO {
+    private int id;
     private String name;
     private int birthYear;
     private String gender;
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
     private Car car;
 
-
-    public Driver() {
-    }
-
-    public Driver(String name, int birthYear, String gender, Car car) {
+    public DriverDTO(String name, int birthYear, String gender, Car car) {
         this.name = name;
         this.birthYear = birthYear;
         this.gender = gender;
         this.car = car;
     }
 
-    public Integer getId() {
+    public DriverDTO(Driver de) {
+        this.id = de.getId();
+        this.name = de.getName();
+        this.birthYear = de.getBirthYear();
+        this.gender = de.getGender();
+        this.car = de.getCar();
+    }
+
+    public static List<DriverDTO> getDtos(List<Driver> des){
+        List<DriverDTO> dDTO = new ArrayList();
+        des.forEach(de->dDTO.add(new DriverDTO(de)));
+        return dDTO;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

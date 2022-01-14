@@ -1,5 +1,7 @@
 package entities;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Time;
@@ -11,29 +13,33 @@ import java.util.List;
 
 @Table(name = "race")
 @Entity
-public class Race implements Serializable {
+public class Race {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
     private String name;
     private String location;
-    private String date;
-    private String time;
+    private Date date;
 
 
     @ManyToMany(cascade = CascadeType.PERSIST)
+    @Expose
     private List<Car> carList;
 
     public Race() {
     }
 
-    public Race(String name, String date, String time, String location, List<Car> carList) {
+    public Race(String name, String location, List<Car> carList) {
         this.name = name;
-        this.date = date;
-        this.time = time;
         this.location = location;
+        this.date = new Date();
         this.carList = carList;
+    }
+    public Race(String name, String location) {
+        this.name = name;
+        this.location = location;
+        this.date = new Date();
     }
 
     public Integer getId() {
@@ -52,20 +58,12 @@ public class Race implements Serializable {
         this.name = name;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
     }
 
     public String getLocation() {

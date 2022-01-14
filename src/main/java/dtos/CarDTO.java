@@ -1,36 +1,43 @@
-package entities;
+package dtos;
 
-import javax.persistence.*;
-import java.io.Serializable;
+
+import entities.Car;
+import entities.Driver;
+import entities.Race;
+
+import java.util.ArrayList;
 import java.util.List;
 
-@Table(name = "car")
-@Entity
-public class Car {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+public class CarDTO {
     private Integer id;
     private String name;
     private String brand;
     private String make;
     private int year;
-
-    @ManyToMany(mappedBy = "carList", cascade = CascadeType.PERSIST)
     private List<Race> raceList;
-
-    @OneToMany(mappedBy = "car", cascade = CascadeType.PERSIST)
     private List<Driver> driverList;
 
-    public Car() {
-    }
 
-    public Car(String name, String brand, String make, int year, List<Driver> driverList) {
+    public CarDTO(String name, String brand, String make, int year) {
         this.name = name;
         this.brand = brand;
         this.make = make;
         this.year = year;
         this.driverList = driverList;
+    }
+
+    public CarDTO(Car car) {
+        this.id = car.getId();
+        this.name = car.getName();
+        this.brand = car.getBrand();
+        this.make = car.getMake();
+        this.year = car.getYear();
+    }
+
+    public static List<CarDTO> getCarDTO(List<Car> car){
+        List<CarDTO> cDTO = new ArrayList<>();
+        car.forEach(ces->cDTO.add(new CarDTO(ces)));
+        return cDTO;
     }
 
     public Integer getId() {

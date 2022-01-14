@@ -12,26 +12,22 @@ import java.util.List;
 public class RaceDTO {
     private Integer id;
     private String name;
-    private String date;
-    private String time;
+    private Date date;
     private String location;
-    private List<Car> carList;
+    private List<CarDTO> carList;
 
-    public RaceDTO(String name, String date, String time, String location, List<Car> carList) {
+    public RaceDTO(String name, String location, Date date) {
         this.name = name;
-        this.date = date;
-        this.time = time;
         this.location = location;
-        this.carList = carList;
+        this.date = date;
     }
 
     public RaceDTO(Race race) {
         this.id = race.getId();
         this.name = race.getName();
         this.date = race.getDate();
-        this.time = race.getTime();
         this.location = race.getLocation();
-        this.carList = race.getCarList();
+        this.carList = CarDTO.getCarDTO(race.getCarList());
     }
 
     public static List<RaceDTO> getDTOs(List<Race> races){
@@ -56,20 +52,12 @@ public class RaceDTO {
         this.name = name;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
     }
 
     public String getLocation() {
@@ -80,11 +68,11 @@ public class RaceDTO {
         this.location = location;
     }
 
-    public List<Car> getCarList() {
+    public List<CarDTO> getCarList() {
         return carList;
     }
 
-    public void setCarList(List<Car> carList) {
+    public void setCarList(List<CarDTO> carList) {
         this.carList = carList;
     }
 }
