@@ -32,7 +32,7 @@ public class AdminResource {
 
 
     @POST
-    @RolesAllowed("user")
+    @RolesAllowed("admin")
     @Consumes("application/json")
     @Produces("application/json")
     public String createRace(String race){
