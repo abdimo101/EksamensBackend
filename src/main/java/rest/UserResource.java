@@ -8,6 +8,7 @@ import dtos.RaceDTO;
 import facades.RaceFacade;
 import utils.EMF_Creator;
 
+import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.*;
@@ -18,7 +19,7 @@ import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 //Todo Remove or change relevant parts before ACTUAL use
-@Path("race")
+@Path("user")
 public class UserResource {
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
@@ -35,24 +36,16 @@ public class UserResource {
 
     @Path("all")
     @GET
-    //@RolesAllowed("user")
+    @RolesAllowed("user")
     @Produces({MediaType.APPLICATION_JSON})
     public String getAllRaces() {
         return GSON.toJson(FACADE.getAll());
     }
 
-    @POST
-    @Consumes("application/json")
-    @Produces("application/json")
-    public String createRace(String race){
-        RaceDTO rdto = GSON.fromJson(race, RaceDTO.class);
-        RaceDTO newrdto = FACADE.createRace(rdto);
-        return GSON.toJson(newrdto);
-    }
 
     @Path("{racename}")
     @GET
-    //@RolesAllowed({"user", "admin"})
+    @RolesAllowed("user")
     @Produces({MediaType.APPLICATION_JSON})
     public String getCarsByRace(@PathParam("racename") String raceName) {
         List<CarDTO> cdtoList = FACADE.getCarsByRace(raceName);
@@ -61,8 +54,9 @@ public class UserResource {
 
     @Path("drivers/{raceName}")
     @GET
+    @RolesAllowed("user")
     @Produces("application/json")
     public String getDriversByName(@PathParam("raceName")String name) {
-        return GSON.toJson(FACADE.getCarsByRace(name));
+        return GSON.toJson(FACADE.getDriversByRace(name));
     }
 }
